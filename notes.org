@@ -40,7 +40,6 @@ Electronic business cards using Progressive Web Apps.  See [[http://www.startups
     This is wrong but the right thing is in the install file. ln -s ~/.spacemacs ~/dotfiles/spacemacs
 
     node.js has been install from the tarball on nodejs.org.  I then symlinked the binarys in the tarball bin to my ~/bin/ folder.
-*** Setup git to use ssh from the github help files
 *** Now that npm is running install the various libraries needed for HTML and JavaScript development.
     :LOGBOOK:
     CLOCK: [2017-08-03 Thu 15:18]
@@ -200,10 +199,57 @@ Now why did it not return "Hello, World!"?
 *** Staging chunks of a diff
 **** Stage one.
 ** Working with GitHub
-*** GitHub SSH configuration
-   https://help.github.com/articles/connecting-to-github-with-ssh/
-   GitHub help does not seem to tell everything needed to establish an SSH connection.
-   https://help.github.com/articles/caching-your-github-password-in-git/
+*** GitHub SSH configuratio
+    https://help.github.com/articles/connecting-to-github-with-ssh/
+    GitHub help does not seem to tell everything needed to establish an SSH connection.
+    https://help.github.com/articles/caching-your-github-password-in-git/
+**** Checking for existing ssh keys.
+#+BEGIN_SRC sh
+  ls -al ~/.ssh
+#+END_SRC
+
+#+RESULTS:
+| total      | 20 |    |    |      |     |   |       |             |
+| drwx------ |  2 | ai | ai | 4096 | Jan | 4 | 19:04 | 0           |
+| drwxr-xr-x | 32 | ai | ai | 4096 | Jan | 7 | 11:07 | ..          |
+| -rw------- |  1 | ai | ai | 3243 | Jan | 4 | 18:57 | id_rsa      |
+| -rw-r--r-- |  1 | ai | ai |  765 | Jan | 4 | 18:57 | id_rsa.pub  |
+| -rw-r--r-- |  1 | ai | ai | 1326 | Jan | 4 | 19:15 | known_hosts |
+**** Is the ssh agent running?
+#+BEGIN_SRC sh
+ ps -aux | grep 'bin/ssh-agent'
+#+END_SRC
+
+#+RESULTS:
+| ai | 1708 | 0.0 | 0.0 | 11140 |  320 | ? | Ss | 10:06 | 0:00 | /usr/bin/ssh-agent | -s            |
+| ai | 6467 | 0.0 | 0.0 | 14224 | 1088 | ? | S  | 12:10 | 0:00 | grep               | bin/ssh-agent |
+**** Check the ssh connection
+#+BEGIN_SRC sh
+  ssh -T git@github.com
+#+END_SRC
+
+#+RESULTS:
+**** What are the remote settigns for the ~/org folder
+#+BEGIN_SRC sh
+cd ~/org
+git remote -v
+#+END_SRC
+
+#+RESULTS:
+| origin | https://github.com/jskksj/org.git (fetch) |
+| origin | https://github.com/jskksj/org.git (push)  |
+
+***** If the remote settings start with http, change them to git
+#+BEGIN_SRC sh
+cd ~/org
+git remote set-url origin ssh://git@github.com/jskksj/org.git
+git remote -v
+#+END_SRC
+
+#+RESULTS:
+| origin | ssh://git@github.com/jskksj/org.git (fetch) |
+| origin | ssh://git@github.com/jskksj/org.git (push)  |
+
 *** Working in one repository and not the other.
 
 Working in GitHub/simple-publishing
@@ -343,6 +389,8 @@ Process /usr/bin/ssh exited abnormally with code 1
 #+END_EXAMPLE
 
 I did have the remote origin set wrong, it was just github rather than git@github.
+
+*** Setup git to use ssh from the github help files
 
 ** eLisp
 *** Display a variables value
