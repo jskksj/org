@@ -1,0 +1,428 @@
+* Entrepreneurship
+  Julian Shapiro of Bell Curve, Indie Hackers #017
+  https://www.indiehackers.com/podcast/017-julian-shapiro-of-bell-curve
+** Finding Business Idea's
+   Look in the support forums for other software applications and see if you can solve peoples problems.
+*** A digital online product is highly "scalable"
+** Pete's Mortuary Marketing
+Electronic business cards using Progressive Web Apps.  See [[http://www.startupsfortherestofus.com/episodes/episode-216-how-a-single-founder-launched-a-7-figure-saas-app-with-nate-grahek][Episode 216]] of [[http://www.startupsfortherestofus.com/][Startups for the Rest of Us]] has a good discussion on this for Portrait Photograpers.
+* Working with *nix
+** Working with ssh
+*** How to back up ssh configuration
+[[https://askubuntu.com/questions/88712/how-do-i-backup-ssh-keys#88717][askubuntu:]] How do I backup ssh keys? And another question on copying the [[https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079][keys.]]
+
+** Dotfiles Organization
+***
+***
+   I have been following some blogs on setting ones dot files up in a well organzied way.  There is a program called [[https://www.gnu.org/software/stow/][stow]], which seems to be just the right thing tgithub@simplexapparati.como automate soft links in the dotfiles folder.
+
+   I find [[http://keifer.link/projects/dotfiles/dotfiles.html][this]] guys dotfiles org file very attractive, I do not have his css though. And finally I think [[/home/kivy/GitHub/dotfiles-ng][this guy]] has a nice reference to actually using org-mode to organize dotfiles.
+** Run the install files in this order
+*** The following shell scripts just call other shell scripts which do the work.
+    sh install-git-ppa.sh
+    sh install-stow.sh
+    sh install-emacs.sh
+    sh install-spacemacs.sh
+*** The new git repository will now contain the latest version of git but the package information will still show the default version.
+    *note* now that I have rebooted it does appear to show the proper version number.
+    add-apt-repository -y ppa:git-core/ppa
+    apt-get -y update
+    apt-get -y install git
+    dpkg -l git
+    ii  git                               1:2.13.0-0ppa1~ubuntu amd64                 fast, scalable, distributed revision control system
+*** I still need to actually use stow, but I might as well have it on the system.
+    apt-get -y update
+    apt-get -y install stow
+    Node.js has been installed in the ~/bin folder.
+*** I did try running the latest emacs from git but the newest version does not work with spacemacs.
+    apt-get install -y emacs
+*** I ran emacs to install spacemacs.
+    git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+    And then reran emacs to update with my own init file.
+    This is wrong but the right thing is in the install file. ln -s ~/.spacemacs ~/dotfiles/spacemacs
+
+    node.js has been install from the tarball on nodejs.org.  I then symlinked the binarys in the tarball bin to my ~/bin/ folder.
+*** Setup git to use ssh from the github help files
+*** Now that npm is running install the various libraries needed for HTML and JavaScript development.
+    :LOGBOOK:
+    CLOCK: [2017-08-03 Thu 15:18]
+    :END:
+    I had to symlink each executable directly into ~/bin/. I need to come up with something better.
+    npm install -g tern
+    npm install -g js-beautify
+    npm install -g jshint
+*** Source Code Pro font installation.
+    npm install git://github.com/adobe-fonts/source-code-pro.git#release
+
+    ln -s ~/node_modules/source-code-pro/ ~/.fonts
+*** Install elm just for kicks.
+    npm install -g elm
+    After that softlink all the elm executables to ~/bin/
+*** I decided to install the Brackets Editor
+    Ok, now that I have the electron version running, I cannot access the live preview feature.  I may just uninstall Brackets in the end.
+    http://brackets.io/
+    There is an error message saying a dependancy cannot be found: libgcrypt11, all I could find was: libgcrypt11-dev, which did not do the trick either.
+    This link: http://www.linuxandubuntu.com/home/solved-adobe-bracket-is-not-installing-in-ubuntu-1510-due-to-missing-dependency-libgcrypt11, has a download link to the correct Debian package, after that it found and installed libcurl.
+**** I forgot that the standard brackets install has a problem with ui font size in linux.
+     I tried an extension that is supposed to help but all it did was make the sidebar font way too big.  Then I found https://github.com/zaggino/brackets-electron/releases, it looks like it is a few minor revisions behind the official release but I think this is what worked for me the last time I installed Brackets.
+
+**** Installing extensions.
+***** The first extension I installed was Vimderbar.
+      Do not forget to enable it under 'View'.
+* Working with org-mode
+** Working with tags
+   The tags are easy enough to add but when I try to search them I get this error message:
+   "Non-existent agenda file ~/dotfiles/org/notes.org/#+TAGS: COMPUTING(c).  [R]emove from list or [A]bort?"
+
+   Be carefull [R]emoving, it can really screw up your file.
+   So it is a missing file? I still get the error after adding notes to org-agenda-files. https://emacs.stackexchange.com/questions/17048/how-to-add-a-directory-to-the-org-agenda-files
+
+   org-agenda-files has to be set just right, the following finally worked.:
+      (setq org-agenda-files (list notes-org agenda-org))
+
+   I think I might try again with a default installation of emacs.  I can experiment using git and go through every combination of values for org-agenda-files.
+
+*** To get into Agenda mode
+    'SPC m a' pops a new window with a list of agenda commands including m for search.
+
+** Working with capture
+** I would like to keep my notes in 'notes.org'
+in the dotfiles directory that is under git.  I tried setting a soft link to that file. Then I added "(setq org-default-notes-file (expand-file-name "~/.notes.org"))" to .spacemacs but capture mode still seems to use a file under ".emacs.d".  Ok, I lied, it seems to be working now with the first task entered in capture mode.
+I changed my mind.  Everything include captures is in notes.org which is in it's own folder within dotfiles.  I also set a [[file:~/dotfiles/spacemacs::(setq%20notes-org%20(expand-file-name%20"~/dotfiles/org/notes.org"))][variable]] to this full path and use that variable to configure everything else.
+** Line wrapping looks like it is working
+but the font size appears to be throwing it off, it is cutting off part of the line.  I just reset the font to 24.  The wrapping looks a lot better now. I also put "(setq org-startup-truncated nil)" into .spacemacs.
+** Now I need a capture template for browser bookmarks.
+A template for bookmarks capturing has been added to .spacemacs but the file specifed does not get the data. Oddly enough it just worked.
+Here is the, Link is broken due to editing. [[file:~/dotfiles/spacemacs::(quote%20(("b"%20"bookmark"%20entry%20(file%20(expand-file-name%20"~/.org/refile.org"))][bookmarks template.]]
+*** Now I want to refile the bookmar but I get
+** Easy Templates
+http://orgmode.org/manual/Easy-templates.html#Easy-templates
+** Funny formating for notes.                                          :NOTE:
+[2017-07-12 Wed 22:29]
+[[file:~/dotfiles/org/notes.org::*Software%20Development][Software Development]]
+** gest stow
+   #+BEGIN_SRC sh
+   mkdir -p stowdir/shell/level1 stowdir/shell/level2
+   ls -al
+   #+END_SRC
+
+   #+RESULTS:
+   | total      | 12 |      |        |      |     |    |       |       |
+   | drwxr-xr-x |  3 | kivy | vboxsf | 4096 | Jul | 19 | 22:47 | 0     |
+   | drwxr-xr-x |  4 | kivy | vboxsf | 4096 | Jul | 19 | 22:47 | ..    |
+   | drwxr-xr-x |  4 | kivy | vboxsf | 4096 | Jul | 19 | 22:47 | shell |
+
+   #+BEGIN_SRC sh
+
+   #+END_SRC
+** org-mode HTML5 export
+   What now brown cow?
+** Who is my simple publishing site for?
+*** One, some one who all ready has some knowledge of emacs
+  Otherwise how would they know org-mode export even exists.
+*** [Wrong] It looks like it is not practical to write literate HTML code.
+*** Constructing a basic template
+    I want to build a template like this one https://www.sitepoint.com/a-minimal-html-document-html5-edition/ by export HTML like this http://orgmode.org/manual/HTML-Specific-export-settings.html#HTML-Specific-export-settings
+
+* Working with Spacemacs
+** How to make spacemacs split window right automatically?
+   https://github.com/syl20bnr/spacemacs/issues/5140
+   You can change the values of split-height-threshold and split-width-threshold. These variables decide when and how split-window-sensibly creates a new window. By default, display-buffer uses split-window-sensibly when it needs to create a new window.
+
+   This is really frustrating.  I have set both variables in such as to force either verticle or horizontal splits but the default behavior is unchanged.  One thing that is peculiar is that Spacemacs was spliting windows vertically by default when I first started it.  Could the split behavior be effected by the font size?
+
+   I had the font set to 22 so I could read the screen from a distance. I changed it 13 and got the same results when reading documention on the variables.  Then I changed it 18 and got a right window when I looked at a larger help file. Running an apropos on the variable splits horizontally while following links splits vertically.
+* Software Development                                                  :WIP:
+** Document Driven Design
+- [[https://www.ybrikman.com/writing/2014/05/05/you-are-what-you-document/][You are what you document]] has a good overview of what you need to do go from the README to the code comments.
+- [[https://opensource.com/open-organization/17/1/repo-tells-a-story][What your code repository tells about you]] This one lays out some general points on the README and how you documentation can tell a story.
+- [[https://opensource.com/open-organization/17/10/readme-maturity-model][Your step-by-step guide to documentation]] Now this page goes into different levels of README files, from practically nothing to enterprize level.
+- [[http://www.writethedocs.org/][Write The Docs]] is an entire website dedicated to writing you documentation.
+- [[https://zachholman.com/posts/open-source-marketing/][Open Source Does Not Just Market Itself]] talks about Document Driven Marketing.
+** Working with org-modes Babel.
+From Babel's main page I downloaded an academic paper on using org-mode for ReproducibleResearch.
+** Reprogram your Facebook or any other WebApp!
+   The git project. [[/home/kivy/GitHub/reprogram-any-webapp]]
+** Working with JavaScript                                              :WEB:
+*** Working with Skewer mode.
+It is installed but I do not see how to use it. It looks like you have to be in a JavaScript buffer for it to work. The thing is I see tutorials online showing skewer being used in HTML files.
+
+*** Installing the Spacemacs JavaScript layer
+sudo -H npm install -g tern
+...
+/usr/local/bin/tern -> /usr/local/lib/node_modules/tern/bin/tern
+└── tern@0.21.0
+npm install -g js-beautify
+...
+/home/kivy/.nvm/versions/node/v6.11.0/bin/css-beautify -> /home/kivy/.nvm/versions/node/v6.11.0/lib/node_modules/js-beautify/js/bin/css-beautify.js
+/home/kivy/.nvm/versions/node/v6.11.0/bin/html-beautify -> /home/kivy/.nvm/versions/node/v6.11.0/lib/node_modules/js-beautify/js/bin/html-beautify.js
+/home/kivy/.nvm/versions/node/v6.11.0/bin/js-beautify -> /home/kivy/.nvm/versions/node/v6.11.0/lib/node_modules/js-beautify/js/bin/js-beautify.js
+└─┬ js-beautify@1.6.14
+├─┬ config-chain@1.1.11
+│ ├── ini@1.3.4
+│ └── proto-list@1.2.4
+├─┬ editorconfig@0.13.2
+│ ├── bluebird@3.5.0
+│ ├── commander@2.11.0
+│ ├─┬ lru-cache@3.2.0
+│ │ └── pseudomap@1.0.2
+│ └── sigmund@1.0.1
+├─┬ mkdirp@0.5.1
+│ └── minimist@0.0.8
+└─┬ nopt@3.0.6
+└── abbrev@1.1.0
+js-beautify --version
+1.6.14
+sudo -H npm install -g eslint
+/usr/local/bin/eslint -> /usr/local/lib/node_modules/eslint/bin/eslint.js
+
+*** Add a src block for JavaScript
+#+BEGIN_SRC js
+return "Hello, World!";
+#+END_SRC
+#+RESULTS:
+: Hello
+
+Now why did it not return "Hello, World!"?
+** Working with magit
+*** How about an 'auto-commit' mode for selected files like Notes.
+*** Staging chunks of a diff
+**** Stage one.
+** Working with GitHub
+*** GitHub SSH configuration
+   https://help.github.com/articles/connecting-to-github-with-ssh/
+   GitHub help does not seem to tell everything needed to establish an SSH connection.
+   https://help.github.com/articles/caching-your-github-password-in-git/
+*** Working in one repository and not the other.
+
+Working in GitHub/simple-publishing
+#+BEGIN_EXAMPLE
+OpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g  1 Mar 2016
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: Applying options for *
+debug1: Connecting to github.com [192.30.253.112] port 22.
+debug1: Connection established.
+debug1: identity file /home/ai/.ssh/id_rsa type 1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_rsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_dsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_dsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ecdsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ecdsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ed25519 type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ed25519-cert type -1
+debug1: Enabling compatibility mode for protocol 2.0
+debug1: Local version string SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.2
+debug1: Remote protocol version 2.0, remote software version libssh_0.7.0
+debug1: no match: libssh_0.7.0
+debug1: Authenticating to github.com:22 as 'git'
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: curve25519-sha256@libssh.org
+debug1: kex: host key algorithm: ssh-rsa
+debug1: kex: server->client cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none
+debug1: kex: client->server cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: Server host key: ssh-rsa SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8
+debug1: Host 'github.com' is known and matches the RSA host key.
+debug1: Found key in /home/ai/.ssh/known_hosts:1
+debug1: rekey after 134217728 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: rekey after 134217728 blocks
+debug1: SSH2_MSG_NEWKEYS received
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug1: Authentications that can continue: publickey
+debug1: Next authentication method: publickey
+debug1: Offering RSA public key: /home/ai/.ssh/id_rsa
+debug1: Server accepts key: pkalg ssh-rsa blen 535
+debug1: Authentication succeeded (publickey).
+Authenticated to github.com ([192.30.253.112]:22).
+debug1: channel 0: new [client-session]
+debug1: Entering interactive session.
+debug1: pledge: network
+debug1: Sending environment.
+debug1: Sending env LANG = en_US.UTF-8
+debug1: client_input_channel_req: channel 0 rtype exit-status reply 0
+Hi jskksj! You've successfully authenticated, but GitHub does not provide shell access.
+debug1: channel 0: free: client-session, nchannels 1
+Transferred: sent 3388, received 2104 bytes, in 0.2 seconds
+Bytes per second: sent 20625.9, received 12809.0
+debug1: Exit status 1
+
+Process /usr/bin/ssh exited abnormally with code 1
+#+END_EXAMPLE
+
+git pull
+Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+[[https://help.github.com/articles/error-permission-denied-publickey/][Please make sure you have the correct access rights]]
+and the repository exists.
+Working in one repository and not the other.
+
+ssh -vT git@github.com not working in dotfiles
+#+BEGIN_EXAMPLE
+OpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g  1 Mar 2016
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: Applying options for *
+debug1: Connecting to github.com [192.30.253.113] port 22.
+debug1: Connection established.
+debug1: identity file /home/ai/.ssh/id_rsa type 1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_rsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_dsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_dsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ecdsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ecdsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ed25519 type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /home/ai/.ssh/id_ed25519-cert type -1
+debug1: Enabling compatibility mode for protocol 2.0
+debug1: Local version string SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.2
+debug1: Remote protocol version 2.0, remote software version libssh_0.7.0
+debug1: no match: libssh_0.7.0
+debug1: Authenticating to github.com:22 as 'git'
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: curve25519-sha256@libssh.org
+debug1: kex: host key algorithm: ssh-rsa
+debug1: kex: server->client cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none
+debug1: kex: client->server cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: Server host key: ssh-rsa SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8
+debug1: Host 'github.com' is known and matches the RSA host key.
+debug1: Found key in /home/ai/.ssh/known_hosts:1
+debug1: rekey after 134217728 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: rekey after 134217728 blocks
+debug1: SSH2_MSG_NEWKEYS received
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug1: Authentications that can continue: publickey
+debug1: Next authentication method: publickey
+debug1: Offering RSA public key: /home/ai/.ssh/id_rsa
+debug1: Server accepts key: pkalg ssh-rsa blen 535
+debug1: Authentication succeeded (publickey).
+Authenticated to github.com ([192.30.253.113]:22).
+debug1: channel 0: new [client-session]
+debug1: Entering interactive session.
+debug1: pledge: network
+debug1: Sending environment.
+debug1: Sending env LANG = en_US.UTF-8
+debug1: client_input_channel_req: channel 0 rtype exit-status reply 0
+Hi jskksj! You've successfully authenticated, but GitHub does not provide shell access.
+debug1: channel 0: free: client-session, nchannels 1
+Transferred: sent 3388, received 2104 bytes, in 0.3 seconds
+Bytes per second: sent 11755.6, received 7300.4
+debug1: Exit status 1
+
+Process /usr/bin/ssh exited abnormally with code 1
+#+END_EXAMPLE
+
+I did have the remote origin set wrong, it was just github rather than git@github.
+
+** eLisp
+*** Display a variables value
+#+BEGIN_SRC emacs-lisp
+(default-value 'org-capture-templates)
+#+END_SRC
+#+RESULTS:
+| b | bookmark | entry | (file (expand-file-name ~/.org/refile.org)) | * BOOKMARK %? |
+** Adding browser bookmarks to org-mode
+*** Developing spacemacs while keeping new updates from overwriting the new code.
+I am not sure how to develop an existing spacemacs layer.  The git project for spacemacs has been cloned and a feature-bookmars branch has been put under develop.  I suppose I will have to merge in updates and then copy the modified file back into the working distribution.
+A submodule for org-cliplinks has been added under the org-mode layer.
+*** How is a elisp file added in from the submodule.
+** I wonder if elisp exercisms would be a help
+*** https://github.com/caiorss/Emacs-Elisp-Programming
+I thought Spacemacs was broken.  I opened up the elisp org-mode file and kept getting a "void variable" error when running elisp blocks.  The problem is that the src blocks have "ELISP>" prompts in them which are non executable.  Now I am trying figure out how to do a search and replace to get rid of them.
+I also was using the wrong VIM command for search and replace.  I should have used ":%s//g".
+*** https://joelmccracken.github.io/entries/emacs-lisp-for-hackers-next/
+Here is a sample Hello World function.
+#+BEGIN_SRC emacs-lisp
+(defun hello-world ()
+"Hello World")
+(hello-world)
+#+END_SRC
+#+RESULTS:
+: hello
+** The Web Developer Bootcamp
+  [[/home/kivy/GitHub/WebDeveloperBootcamp/]]
+** design-develop-killer-websites-html5-css3
+   [[/home/dev/GitHub/design-develop-killer-websites-html5-css3][design-develop-killer-websites-html5-css3]]
+** Web apps are not real applications; they are really websites that,
+   in many ways, look and feel like native applications, but are not [[https://www.nngroup.com/articles/mobile-native-apps/][implemented]] as such.
+** Working with HTML5/CSS3
+*** Beware of CSS colors
+    I made the mistake of using a color name instead of a specifed color and I did not get a background for my button.
+    https://www.udemy.com/design-and-develop-a-killer-website-with-html5-and-css3/learn/v4/t/lecture/2619752?start=0
+*** &emdash; was working
+    so I had to use the &#8212; entity code.
+**** Interactive Comic HTML5/CSS3
+
+*** clearfix is bizare.
+    https://stackoverflow.com/questions/211383/what-methods-of-clearfix-can-i-use
+** Writing Browser Extensions
+*** References
+    https://developer.chrome.com/extensions Chrome Dev Tools tutorials
+    https://developer.mozilla.org/en-US/Add-ons/WebExtensions MDN WebExtensions
+*** Google Chrome Getting Started
+* Working with org-mode
+** Markdown export menu is missing
+[[https://stackoverflow.com/questions/22988092/emacs-org-mode-export-markdown][require 'ox-md nil t]] Check out the [[https://orgmode.org/worg/exporters/ox-overview.html][ new export menu]].
+* Browser Bookmarks
+
+  http://www.karl-voit.at/2014/08/10/bookmarks-with-orgmode/
+  https://github.com/rexim/org-cliplink
+  http://doc.norang.ca/org-mode.html#Capture
+* Open Source Business
+** Content Marketing
+** Nathan Barry convertkit blog                                        :NOTE:
+*** How others advised him.
+    He was first advised to interview people in industries such as real estate, and see what kind of problems they needed solved.
+
+    Next advice, don't do that because what if you're not interested in real estate, Nathan wasn't. Instead scratch your own itch, work on what interests you, what do you already have an audience with. Barry already had a mailing list for people in marketing.
+*** Avoid winner-take-all markets.
+    Large competitors prove there is a market. It also makes it easier to sell to people because you can use the large competitor as an example of what you're trying to improve on.
+
+    Nathan says he would never go into an unproven market, it's too hard to sell.
+*** Teach everything you know.
+    Make actual stuff every day. Show all your work.
+*** Building an audience.
+    Work in public consistently over two or three years to build an audience.
+
+    Look for public website barometrics. Sharing sales information helps build an audience without really giving that much away to competitors.
+*** Talk to real people.
+    Direct sales, actually talk to people, preferably in person. Narrow specific niche.
+*** Why people do not buy your stuff.
+    While content marketing can build an audience, it doesn't specifically tell you why people are not buying. When you talk to people trying to sell them your products you can actually ask them to buy it and if they refuse you can hopefully find out why they don't buy.
+
+   [2017-07-20 Thu 01:09]
+   [[file:~/dotfiles/org/notes.org::*]]
+* Resistance
+** We are all Fascists No
+*** Who is the Jewish Zionist who was called 'Fascist'
+  He was objecting to the stereotypcal Jewish notion that Zionism couild be advanced by cheating the "stupid Arabs" rather than treating them as adults.
+  Was it this guy -- https://infogalactic.com/info/Ze%27ev_Jabotinsky#By_Jabotinsky
+** Memes
+*** A communist in an open coffin
+    Hello Comrade, here is a nice safe space for you.
+* Personal
+** Head size for hats
+23.5 inches
+* BOOKMARKS
+** BOOKMARK A bookmark.
+[2017-07-12 Wed 22:29]
+* NOTES
