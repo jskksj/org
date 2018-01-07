@@ -12,8 +12,6 @@ Electronic business cards using Progressive Web Apps.  See [[http://www.startups
 [[https://askubuntu.com/questions/88712/how-do-i-backup-ssh-keys#88717][askubuntu:]] How do I backup ssh keys? And another question on copying the [[https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079][keys.]]
 
 ** Dotfiles Organization
-***
-***
    I have been following some blogs on setting ones dot files up in a well organzied way.  There is a program called [[https://www.gnu.org/software/stow/][stow]], which seems to be just the right thing tgithub@simplexapparati.como automate soft links in the dotfiles folder.
 
    I find [[http://keifer.link/projects/dotfiles/dotfiles.html][this]] guys dotfiles org file very attractive, I do not have his css though. And finally I think [[/home/kivy/GitHub/dotfiles-ng][this guy]] has a nice reference to actually using org-mode to organize dotfiles.
@@ -84,6 +82,19 @@ Electronic business cards using Progressive Web Apps.  See [[http://www.startups
 
 *** To get into Agenda mode
     'SPC m a' pops a new window with a list of agenda commands including m for search.
+
+*** Why does not the tag search work?
+*Setup*
+First you must set the variable org-agenda-files so that org-mode will know which files to search for TODOs and scheduled items.
+
+Let's imagine you already have several org files—say, one for work, one for home, and one for school.
+
+Then you'd add the following to your emacs initialization file:
+#+BEGIN_EXAMPLE
+(setq org-agenda-files (list "~/org/work.org"
+                             "~/org/school.org"
+                             "~/org/home.org"))
+#+END_EXAMPLE
 
 ** Working with capture
 ** I would like to keep my notes in 'notes.org'
