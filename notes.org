@@ -390,7 +390,6 @@ Process /usr/bin/ssh exited abnormally with code 1
 
 I did have the remote origin set wrong, it was just github rather than git@github.
 
-*** Setup git to use ssh from the github help files
 
 ** eLisp
 *** Display a variables value
