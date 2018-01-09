@@ -149,6 +149,7 @@ http://orgmode.org/manual/Easy-templates.html#Easy-templates
 - [[https://opensource.com/open-organization/17/10/readme-maturity-model][Your step-by-step guide to documentation]] Now this page goes into different levels of README files, from practically nothing to enterprize level.
 - [[http://www.writethedocs.org/][Write The Docs]] is an entire website dedicated to writing you documentation.
 - [[https://zachholman.com/posts/open-source-marketing/][Open Source Does Not Just Market Itself]] talks about Document Driven Marketing.
+- [[http://www.writethedocs.org/guide/writing/beginners-guide-to-docs/#readme][Read The Docs]] Lots of detail on what to wrie.
 ** Working with org-modes Babel.
 From Babel's main page I downloaded an academic paper on using org-mode for ReproducibleResearch.
 ** Reprogram your Facebook or any other WebApp!
