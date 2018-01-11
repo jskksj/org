@@ -1,11 +1,43 @@
 * Entrepreneurship
-  Julian Shapiro of Bell Curve, Indie Hackers #017
-  https://www.indiehackers.com/podcast/017-julian-shapiro-of-bell-curve
+   Julian Shapiro of Bell Curve, Indie Hackers #017
+   https://www.indiehackers.com/podcast/017-julian-shapiro-of-bell-curve
+** Writing
+*** Business and Technical Writing Immersion Course
+**** General Considerations for Writing a Document
+***** Write the Purpose Statment for the Document
+****** Type of Document
+A memo, notes, README, or Tutorial.
+
+****** What does the Document do?
+For example you can pick a verb with a neutral tone such as:
+- describes: This tutorial describes how to paint the floor.
+- explains: This meme eplains why it is important to brush your teeth.
+In other casees a more agressive word is approriate:
+- notify: This memo is to notify you that you have been fired.
+- alert: This leaflet is to alert you to the missing person.
+
+****** What information does the audience need
+- How to install the software.
+- This is how to use the software.
+
+****** Define the audience
+There are three types of audiences when writing for business or technical people.
+- Experts give advice.
+- Managers make plans and deccisions.
+- Operators follow instructions.
+
+All people inhabit each type of audience depending on circumstance.
+
+****** What does the audiences do with the information
+
+
 ** Finding Business Idea's
    Look in the support forums for other software applications and see if you can solve peoples problems.
 *** A digital online product is highly "scalable"
 ** Pete's Mortuary Marketing
 Electronic business cards using Progressive Web Apps.  See [[http://www.startupsfortherestofus.com/episodes/episode-216-how-a-single-founder-launched-a-7-figure-saas-app-with-nate-grahek][Episode 216]] of [[http://www.startupsfortherestofus.com/][Startups for the Rest of Us]] has a good discussion on this for Portrait Photograpers.
+* Working with emacs
+
 * Working with *nix
 ** Working with ssh
 *** How to back up ssh configuration
